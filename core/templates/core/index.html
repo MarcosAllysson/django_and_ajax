@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+    <title>Django Ajax</title>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mt-3"> Live data with django and ajax </h1>
+        <ul id='display'></ul>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        $(document).ready(function(){
+            setInterval(function(){
+                $.ajax({
+                    type: "GET",
+                    url: "{% url 'index:getProfiles' %}",
+                    success: function(response){
+                        // Response its all objects from DB
+                        
+                        // Cleaning everything inside ul tag
+                        $("#display").empty();
+
+                        // looping though objects of response
+                        for (var key in response.profiles){
+                            // Create li elements
+                            var temp = "<li>"+ response.profiles[key].name +"</li>";
+
+                            // Appending these elements on ul tag
+                            $("#display").append(temp);
+                        }
+                    }, 
+                    error: function(response){
+                        alert('Error getting data');
+                    }
+                });
+            }, 1000); // duration
+        });
+    </script>
+</body>
+</html>
